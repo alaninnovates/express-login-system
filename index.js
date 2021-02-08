@@ -24,14 +24,10 @@ app.use(express.urlencoded({ extended: true }))
 
 app.get('/', async (req, res) => {
     /*
-    db.list().then(keys => keys.forEach(async k => {
-        await db.delete(k) 
-    }))
+    db.list().then(keys => keys.forEach(async k => await db.delete(k)));
     */
     /*
-    db.list().then(keys => keys.forEach(async k => {
-        console.log(`${k} ${await db.get(k)}`)
-    }))
+    db.list().then(keys => keys.forEach(async k => console.log(`${k} ${await db.get(k)}`)));
     */
     res.render('pages/index', { session: req.session });
 });
