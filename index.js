@@ -111,7 +111,7 @@ app.post('/rm', async (req, res) => {
 
     // Check if the username is not in the database
     if (!keys.includes(username)) {
-        return res.render('pages/delAccConfirmation', { error: 'Incorrect username inputted!' });
+        return res.render('pages/delAccConfirmation', { session: req.session, error: 'Incorrect username inputted!' });
         // Delete the account if everything is right
     } else {
         await db.delete(username);
