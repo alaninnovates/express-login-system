@@ -10,6 +10,7 @@
             <div>
                 <% if (session.user) { %>
                 <h1>Hello, <%= session.user %></h1>
+                <a href='/logout'><button type="button">Log out</button></a>
                 <% } else { %>
                 <h1>You aren't logged in!</h1>
                 <p>Log in <a href='/login'>here</a></p>
