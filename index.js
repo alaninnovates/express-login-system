@@ -28,6 +28,8 @@ app.use(session({
 }));
 // To recieve form data
 app.use(express.urlencoded({ extended: true }))
+// Public folder
+app.use('/static', express.static('public'));
 
 app.get('/', async (req, res) => {
 
