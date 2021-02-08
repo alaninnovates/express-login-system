@@ -1,0 +1,27 @@
+<html lang="en">
+
+    <head>
+        <%- include('../partials/head'); %>
+    </head>
+
+    <body>
+
+        <main>
+            <div>
+                <% if (session.user) { %>
+                <h1>Hello, <%= session.user %></h1>
+                <% } else { %>
+                <h1>You aren't logged in!</h1>
+                <p>Log in <a href='/login'>here</a></p>
+                <p>Sign up <a href='/signup'>here</a></p>
+                <% } %>
+            </div>
+        </main>
+
+        <footer>
+            <%- include('../partials/footer'); %>
+        </footer>
+
+    </body>
+
+</html>

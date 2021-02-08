@@ -1,0 +1,28 @@
+<html lang="en">
+
+    <head>
+        <%- include('../partials/head'); %>
+    </head>
+
+    <body>
+
+        <main>
+            <div>
+                <form role="form" method='POST' action='/log'>
+                    <input autocomplete="off" type="text" name="username" placeholder="Enter username" required>
+                    <input autocomplete="off" type="password" name="password" placeholder="Enter password" required>
+                    <% if (error || error !== '') { %>
+                    <p id='error'><%= error %></p>
+                    <% } %>
+                    <button type="submit">Log in</button>
+                </form>
+            </div>
+        </main>
+
+        <footer>
+            <%- include('../partials/footer'); %>
+        </footer>
+
+    </body>
+
+</html>
