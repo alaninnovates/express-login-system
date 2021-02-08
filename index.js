@@ -60,7 +60,7 @@ app.post('/sign', async (req, res) => {
         return res.render('pages/signup', { error: 'Already a user with that name.' });
         // If username is under 2 characters
     } else if (username.length < 2) {
-        return res.render('pages/signup', { error: 'Username needs to be at least 2 cahracters long' });
+        return res.render('pages/signup', { error: 'Username needs to be at least 2 characters long' });
         // If password is under 6 characters
     } else if (password1.length < 6) {
         return res.render('pages/signup', { error: 'Password needs to be at least 6 characters long' });
@@ -70,7 +70,6 @@ app.post('/sign', async (req, res) => {
         // After all the checks, sign up.
     } else {
         await db.set(username, hashPassword(password1));
-        hashPassword(password1)
         req.session.user = username;
         res.redirect('/');
     }
