@@ -1,0 +1,37 @@
+<html lang="en">
+
+    <head>
+        <%- include('../partials/head'); %>
+    </head>
+
+    <body>
+
+        <main>
+            <div>
+                <% if (session.user) { %>
+                <h1>Are you sure you would like to delete your account, <%= session.user %>?</h1>
+                <p>This is irreversable.</p>
+                <form role="form" method='POST' action='/rm'>
+                    <p>If you wish to delete your account, please enter your account name and click delete account.</p>
+                    <input autocomplete="off" type="username" name="username" placeholder="Enter username" required>
+                    <% if (error || error !== '') { %>
+                    <p id='error'><%= error %></p>
+                    <% } %>
+                    <button type="submit">Delete account</button>
+                </form>
+                <p>Changed your mind? Click <a href='/'>here</a> to get back to the home page!</p>
+                <% } else { %>
+                <h1>You aren't logged in!</h1>
+                <p>Log in <a href='/login'>here</a></p>
+                <p>Sign up <a href='/signup'>here</a></p>
+                <% } %>
+            </div>
+        </main>
+
+        <footer>
+            <%- include('../partials/footer'); %>
+        </footer>
+
+    </body>
+
+</html>

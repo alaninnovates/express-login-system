@@ -96,6 +96,28 @@ app.post('/log', async (req, res) => {
     }
 });
 
+// Delete account
+app.get('/delete', (req, res) => {
+    res.render('pages/delAccConfirmation', { session: req.session, error: '' })
+})
+
+app.post('/rm', async (req, res) => {
+    const keys = await db.list();
+
+    // Form elements
+    const username = req.body.username;
+
+    // Check if the username is not in the database
+    if (!keys.includes(username)) {
+        return res.render('pages/delAccConfirmation', { error: 'Incorrect username inputted!' });
+    // Delete the account if everything is right
+    } else {
+        await db.delete(username);
+        req.session.user = '';
+        res.redirect('/');
+    }
+})
+
 // Clear the session user and return to homepage
 app.get('/logout', (req, res) => {
     req.session.user = '';
