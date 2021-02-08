@@ -26,15 +26,17 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }));
+// To recieve form data
 app.use(express.urlencoded({ extended: true }))
 
 app.get('/', async (req, res) => {
+
     /*
     db.list().then(keys => keys.forEach(async k => await db.delete(k)));
-    */
-    /*
+
     db.list().then(keys => keys.forEach(async k => console.log(`${k} ${await db.get(k)}`)));
     */
+
     res.render('pages/index', { session: req.session });
 });
 
@@ -54,16 +56,16 @@ app.post('/sign', async (req, res) => {
     // If username is already in database
     if (keys.includes(username)) {
         return res.render('pages/signup', { error: 'Already a user with that name.' });
-    // If username is under 2 characters
+        // If username is under 2 characters
     } else if (username.length < 2) {
         return res.render('pages/signup', { error: 'Username needs to be at least 2 cahracters long' });
-    // If password is under 6 characters
+        // If password is under 6 characters
     } else if (password1.length < 6) {
         return res.render('pages/signup', { error: 'Password needs to be at least 6 characters long' });
-    // If passwords do not match
+        // If passwords do not match
     } else if (password1 !== password2) {
         return res.render('pages/signup', { error: 'Passwords did not match' });
-    // After all the checks, sign up.
+        // After all the checks, sign up.
     } else {
         await db.set(username, hashPassword(password1));
         hashPassword(password1)
@@ -87,7 +89,7 @@ app.post('/log', async (req, res) => {
     // Check if the username is not in the database
     if (!keys.includes(username)) {
         return res.render('pages/login', { error: 'Incorrect username or password.' });
-    // Check if the passwords are correct
+        // Check if the passwords are correct
     } else if (checkPassword(await db.get(username), password)) {
         req.session.user = username;
         res.redirect('/');
@@ -110,7 +112,7 @@ app.post('/rm', async (req, res) => {
     // Check if the username is not in the database
     if (!keys.includes(username)) {
         return res.render('pages/delAccConfirmation', { error: 'Incorrect username inputted!' });
-    // Delete the account if everything is right
+        // Delete the account if everything is right
     } else {
         await db.delete(username);
         req.session.user = '';
