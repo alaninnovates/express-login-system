@@ -1,17 +1,17 @@
 // Express
-const session = require('express-session');
-const express = require('express');
-const cookieParser = require('cookie-parser');
+import session from 'express-session';
+import express from 'express';
+import cookieParser from 'cookie-parser';
 
 // Database
-const Database = require("@replit/database");
+import { Database } from './database';
 const db = new Database();
 
 // Hashing util
-const {
+import {
     hashPassword,
     checkPassword
-} = require('./gen');
+} from './gen';
 
 const app = express();
 
@@ -22,7 +22,7 @@ app.set('view engine', 'ejs')
 app.use(cookieParser());
 // Session storage
 app.use(session({
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET as string,
     resave: true,
     saveUninitialized: true
 }));
@@ -48,12 +48,12 @@ app.get('/signup', (req, res) => {
 });
 
 app.post('/sign', async (req, res) => {
-    const keys = await db.list();
+    const keys: Array<string> = await db.list();
 
     // Form elements
-    const username = req.body.username;
-    const password1 = req.body.password1;
-    const password2 = req.body.password2;
+    const username: string = req.body.username;
+    const password1: string = req.body.password1;
+    const password2: string = req.body.password2;
 
     // If username is already in database
     if (keys.includes(username)) {
@@ -70,7 +70,7 @@ app.post('/sign', async (req, res) => {
     // After all the checks, sign up.
     } else {
         await db.set(username, hashPassword(password1));
-        req.session.user = username;
+        Object.assign(req.session, { user: username });
         res.redirect('/');
     }
 });
@@ -81,18 +81,18 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/log', async (req, res) => {
-    const keys = await db.list();
+    const keys: Array<string> = await db.list();
 
     // Form elements
-    const username = req.body.username;
-    const password = req.body.password;
+    const username: string = req.body.username;
+    const password: string = req.body.password;
 
     // Check if the username is not in the database
     if (!keys.includes(username)) {
         return res.render('pages/login', { error: 'Incorrect username or password.' });
     // Check if the passwords are correct
-    } else if (checkPassword(await db.get(username), password)) {
-        req.session.user = username;
+    } else if (checkPassword(await db.get(username) as string, password)) {
+        Object.assign(req.session, { user: username });
         res.redirect('/');
     } else {
         res.render('pages/login', { error: 'Incorrect username or password.' });
@@ -105,10 +105,10 @@ app.get('/delete', (req, res) => {
 });
 
 app.post('/rm', async (req, res) => {
-    const keys = await db.list();
+    const keys: Array<string> = await db.list();
 
     // Form elements
-    const username = req.body.username;
+    const username: string = req.body.username;
 
     // Check if the username is not in the database
     if (!keys.includes(username)) {
@@ -116,17 +116,17 @@ app.post('/rm', async (req, res) => {
     // Delete the account if everything is right
     } else {
         await db.delete(username);
-        req.session.user = '';
+        Object.assign(req.session, { user: '' });
         res.redirect('/');
     }
 });
 
 // Clear the session user and return to homepage
 app.get('/logout', (req, res) => {
-    req.session.user = '';
+    Object.assign(req.session, { user: '' });
     res.redirect('/');
 });
 
 app.listen(process.env.SERVER_PORT, () => {
-    console.log(`Server up on port $        {process.env.SERVER_PORT}`);
+    console.log(`Server up on port ${process.env.SERVER_PORT}`);
 });

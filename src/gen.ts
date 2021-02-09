@@ -1,10 +1,4 @@
-// Check if the crypto package is supported
-let crypto;
-try {
-    crypto = require('crypto');
-} catch (err) {
-    console.log('Cannot require crypto, most likely it is disabled');
-}
+const crypto = require('crypto');
 
 /**
  * Generate a random hex/string
@@ -12,10 +6,10 @@ try {
  * @param {integer} length - The length of the string you want
  * @returns {string}
  */
-const genRandomString = (len) => {
+const genRandomString = (len: number) => {
     const str = 'ABCDEFGHIJKLMNOPQRSTUVWDYZabcdefghijklmnopqrstuvwdyz1234567890';
     let hex = '';
-    for (i=0; i<len; i++) {
+    for (let i=0; i<len; i++) {
         hex += str.charAt(Math.floor(Math.random() * str.length));
     }
     return hex;
@@ -28,7 +22,7 @@ const genRandomString = (len) => {
  * @param {string} salt - The salt to hash the password with
  * @returns {Object}
  */
-const sha512 = (password, salt) => {
+const sha512 = (password: string, salt: string) => {
     const hash = crypto.createHmac('sha512', salt)
         .update(password)
         .digest('hex');
@@ -44,7 +38,7 @@ const sha512 = (password, salt) => {
  * @param {string} userpassword - The password to hash
  * @returns {string}
  */
-const hashPassword = (userpassword) =>  {
+const hashPassword = (userpassword: string) =>  {
     const salt = genRandomString(16); 
     const passwordData = sha512(userpassword, salt);
 
@@ -58,13 +52,13 @@ const hashPassword = (userpassword) =>  {
  * @param {string} userPassword - The password the user inputted
  * @returns {boolean}
  */
-const checkPassword = (hashedPassword, userPassword) => {
+const checkPassword = (hashedPassword: string, userPassword: string) => {
     const [password, salt] = hashedPassword.split(':');
     const hash = sha512(userPassword, salt);
     return password === hash.passwordHash;
 };
 
-module.exports = {
+export {
     hashPassword,
     checkPassword
 };
